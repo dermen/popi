@@ -1,0 +1,62 @@
+
+ARE INTER/INTRA FROM DIFFERENT GAUSSIANS?
+
+MODEL : 3LYZ
+Answer: yes, prob. ratio ~10^200
+
+$ python calc_bayes_factor_two_gaussians.py 3lys-pca.npz 
+usage: python calc_bayes_factor_two_gaussians.py <file>
+loaded: 3lys-pca.npz
+ --- Running 20000 Samples ---
+Sample: 0/20000
+Sample: 1000/20000
+Sample: 2000/20000
+Sample: 3000/20000
+Sample: 4000/20000
+Sample: 5000/20000
+Sample: 6000/20000
+Sample: 7000/20000
+Sample: 8000/20000
+Sample: 9000/20000
+Sample: 10000/20000
+Sample: 11000/20000
+Sample: 12000/20000
+Sample: 13000/20000
+Sample: 14000/20000
+Sample: 15000/20000
+Sample: 16000/20000
+Sample: 17000/20000
+Sample: 18000/20000
+Sample: 19000/20000
+Calculated Bayes Factor:
+Log10 factor for split/combined models: 220.756739
+Saved: convergence.pdf
+
+
+$ python calc_bayes_factor_two_gaussians.py 2ZWH-pca.npz 
+usage: python calc_bayes_factor_two_gaussians.py <file>
+loaded: 2ZWH-pca.npz
+ --- Running 20000 Samples ---
+Sample: 0/20000
+Sample: 1000/20000
+Sample: 2000/20000
+Sample: 3000/20000
+Sample: 4000/20000
+Sample: 5000/20000
+Sample: 6000/20000
+Sample: 7000/20000
+Sample: 8000/20000
+Sample: 9000/20000
+Sample: 10000/20000
+Sample: 11000/20000
+Sample: 12000/20000
+Sample: 13000/20000
+Sample: 14000/20000
+Sample: 15000/20000
+Sample: 16000/20000
+Sample: 17000/20000
+Sample: 18000/20000
+Sample: 19000/20000
+Calculated Bayes Factor:
+Log10 factor for split/combined models: 189.689927
+Saved: convergence.pdf
