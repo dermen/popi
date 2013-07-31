@@ -13,8 +13,8 @@ def self_pca(intra,inter,num_inter=0,numVals=0,numHistBins=50,pc_comp=0,title=""
     component (first principal component by default).
     Parameters
     ----------
-    intra : 2darray of floats; axis 0 = shot index; axis 1 = fft coefficient
-    inter : 2darray of floats; axis 0 = shot index; axis 1 = fft coefficient
+    intra : 2darray of floats; axis 0 = shot index; axis 1 = delta phi index
+    inter : 2darray of floats; axis 0 = shot index; axis 1 = delta phi index
     Optional
     --------
     numVals     : int, number of fft coefficients to include in the PCA matrix
