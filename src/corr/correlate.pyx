@@ -5,17 +5,19 @@ from scipy import fftpack
 
 cdef extern from "corr.h":
   cdef cppclass Corr:
-    Corr(int N_, float * ar1, float * ar2, float * ar3) except +
+    Corr(int N_, float * ar1, float * ar2, float * ar3, float mask_val_) except +
 
 cdef Corr * c
 
-def correlate(A,B):
+def correlate(A,B, mask_val = -1):
   """
   compute the correlation between 2 arrays
   Parameters:
   -----------
   A, 1D numpy array
-  B, 1D numpy array 
+  B, 1D numpy array
+  mask_val, number value of each masked pixels ( defaults = -1 )
+            they should all have the same value
   """
   if A.shape != B.shape:
     print "arrays must be of same size and shape" 
@@ -29,7 +31,7 @@ def correlate(A,B):
   v1 = np.ascontiguousarray(A.flatten(),dtype=np.float32)
   v2 = np.ascontiguousarray(B.flatten(),dtype=np.float32)
   v3 = np.ascontiguousarray(C.flatten(),dtype=np.float32)
-  c  = new Corr(N,&v1[0], &v2[0], &v3[0])
+  c  = new Corr(N,&v1[0], &v2[0], &v3[0], mask_val)
   del c
   return v3
 

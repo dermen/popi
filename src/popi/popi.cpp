@@ -51,26 +51,27 @@ float PolarPilatus::F(float ar[],int i,int j)
 }
 
 float PolarPilatus::EvaluateIntensity(float coef[],float x,float y){
-                float a00=coef[0];
-                float a10=coef[1];
-                float a20=coef[2];
-                float a30=coef[3];
-                float a01=coef[4];
-                float a11=coef[5];
-                float a21=coef[6];
-                float a31=coef[7];
-                float a02=coef[8];
-                float a12=coef[9];
-                float a22=coef[10];
-                float a32=coef[11];
-                float a03=coef[12];
-                float a13=coef[13];
-                float a23=coef[14];
-                float a33=coef[15];
-		float interpI = a00 + a10*x + a20*x*x + a30*x*x*x;
-                interpI+= a01*y + a11*x*y + a21*x*x*y + a31*x*x*x*y;
-                interpI+= a02*y*y + a12*x*y*y + a22*x*x*y*y + a32*x*x*x*y*y;
-                interpI+= a03*y*y*y + a13*x*y*y*y + a23*x*x*y*y*y + a33*x*x*x*y*y*y;
+        a00=coef[0];
+        a10=coef[1];
+        a20=coef[2];
+        a30=coef[3];
+        a01=coef[4];
+        a11=coef[5];
+        a21=coef[6];
+         a31=coef[7];
+         a02=coef[8];
+         a12=coef[9];
+         a22=coef[10];
+         a32=coef[11];
+         a03=coef[12];
+         a13=coef[13];
+         a23=coef[14];
+         a33=coef[15];
+		
+        interpI = a00 + a10*x + a20*x*x + a30*x*x*x;
+          interpI+= a01*y + a11*x*y + a21*x*x*y + a31*x*x*x*y;
+          interpI+= a02*y*y + a12*x*y*y + a22*x*x*y*y + a32*x*x*x*y*y;
+          interpI+= a03*y*y*y + a13*x*y*y*y + a23*x*x*y*y*y + a33*x*x*x*y*y*y;
                 /*
                 interpI = 0;
                 aij=0
@@ -83,7 +84,7 @@ float PolarPilatus::EvaluateIntensity(float coef[],float x,float y){
                                 i+=1
                         j+=1
                 */
-                return interpI;
+        return interpI;
 		}
 
 void  PolarPilatus::bicubicCoefficients( float *I ){
@@ -240,34 +241,34 @@ void  PolarPilatus::bicubicCoefficients( float *I ){
 	while(y < Ydim-1){
 		x=0;
 		while(x<Xdim-1){
-			float a00 = F(I,x,y);
-			float a10 = F(dIdx,x,y);
-			float a20 = -3*F(I,x,y) + 3*F(I,x+1,y) - 2*F(dIdx,x,y) - F(dIdx,x+1,y);
-			float a30 = 2*F(I,x,y) - 2*F(I,x+1,y) + F(dIdx,x,y) + F(dIdx,x+1,y);
+			 a00 = F(I,x,y);
+			 a10 = F(dIdx,x,y);
+			 a20 = -3*F(I,x,y) + 3*F(I,x+1,y) - 2*F(dIdx,x,y) - F(dIdx,x+1,y);
+			 a30 = 2*F(I,x,y) - 2*F(I,x+1,y) + F(dIdx,x,y) + F(dIdx,x+1,y);
 
-			float a01 = F(dIdy,x,y);
-			float a11 = F(dIdxdy,x,y);
-			float a21 = -3*F(dIdy,x,y) + 3*F(dIdy,x+1,y) - 2*F(dIdxdy,x,y) - F(dIdxdy,x+1,y);
-			float a31 = 2*F(dIdy,x,y) - 2*F(dIdy,x+1,y) + F(dIdxdy,x,y) + F(dIdxdy,x+1,y);
+			 a01 = F(dIdy,x,y);
+			 a11 = F(dIdxdy,x,y);
+			 a21 = -3*F(dIdy,x,y) + 3*F(dIdy,x+1,y) - 2*F(dIdxdy,x,y) - F(dIdxdy,x+1,y);
+			 a31 = 2*F(dIdy,x,y) - 2*F(dIdy,x+1,y) + F(dIdxdy,x,y) + F(dIdxdy,x+1,y);
 
-			float a02 = -3*F(I,x,y) + 3*F(I,x,y+1) - 2*F(dIdy,x,y) - F(dIdy,x,y+1);
-			float a12 = -3*F(dIdx,x,y) + 3*F(dIdx,x,y+1) - 2*F(dIdxdy,x,y) - F(dIdxdy,x,y+1);
-			float a22 = 9*F(I,x,y) - 9*F(I,x+1,y) - 9*F(I,x,y+1) + 9*F(I,x+1,y+1);
+			 a02 = -3*F(I,x,y) + 3*F(I,x,y+1) - 2*F(dIdy,x,y) - F(dIdy,x,y+1);
+			 a12 = -3*F(dIdx,x,y) + 3*F(dIdx,x,y+1) - 2*F(dIdxdy,x,y) - F(dIdxdy,x,y+1);
+			 a22 = 9*F(I,x,y) - 9*F(I,x+1,y) - 9*F(I,x,y+1) + 9*F(I,x+1,y+1);
 			a22+= 6*F(dIdx,x,y) + 3*F(dIdx,x+1,y) - 6*F(dIdx,x,y+1) - 3*F(dIdx,x+1,y+1);
 			a22+= 6*F(dIdy,x,y) - 6*F(dIdy,x+1,y) + 3*F(dIdy,x,y+1) - 3*F(dIdy,x+1,y+1);
 			a22+= 4*F(dIdxdy,x,y) + 2*F(dIdxdy,x+1,y) + 2*F(dIdxdy,x,y+1) + F(dIdxdy,x+1,y+1);
-			float a32 = -6*F(I,x,y) + 6*F(I,x+1,y) + 6*F(I,x,y+1) - 6*F(I,x+1,y+1);
+			 a32 = -6*F(I,x,y) + 6*F(I,x+1,y) + 6*F(I,x,y+1) - 6*F(I,x+1,y+1);
 			a32+= -3*F(dIdx,x,y) - 3*F(dIdx,x+1,y) + 3*F(dIdx,x,y+1)+ 3*F(dIdx,x+1,y+1);
 			a32+= -4*F(dIdy,x,y) + 4*F(dIdy,x+1,y) - 2*F(dIdy,x,y+1) + 2*F(dIdy,x+1,y+1);
 			a32+= -2*F(dIdxdy,x,y) - 2*F(dIdxdy,x+1,y) -F(dIdxdy,x,y+1) -F(dIdxdy,x+1,y+1);
 
-			float a03 = 2*F(I,x,y) - 2*F(I,x,y+1) + F(dIdy,x,y) + F(dIdy,x,y+1);
-			float a13 = 2*F(dIdx,x,y) - 2*F(dIdx,x,y+1) + F(dIdxdy,x,y) + F(dIdxdy,x,y+1);
-			float a23 = -6*F(I,x,y) + 6*F(I,x+1,y) + 6*F(I,x,y+1) - 6*F(I,x+1,y+1);
+			 a03 = 2*F(I,x,y) - 2*F(I,x,y+1) + F(dIdy,x,y) + F(dIdy,x,y+1);
+			 a13 = 2*F(dIdx,x,y) - 2*F(dIdx,x,y+1) + F(dIdxdy,x,y) + F(dIdxdy,x,y+1);
+			 a23 = -6*F(I,x,y) + 6*F(I,x+1,y) + 6*F(I,x,y+1) - 6*F(I,x+1,y+1);
 			a23+= -4*F(dIdx,x,y) -2*F(dIdx,x+1,y) + 4*F(dIdx,x,y+1) + 2*F(dIdx,x+1,y+1);
 			a23+= -3*F(dIdy,x,y) + 3*F(dIdy,x+1,y) - 3*F(dIdy,x,y+1) + 3*F(dIdy,x+1,y+1);
 			a23+= -2*F(dIdxdy,x,y) - F(dIdxdy,x+1,y) - 2*F(dIdxdy,x,y+1) - F(dIdxdy,x+1,y+1);
-			float a33 = 4*F(I,x,y) - 4*F(I,x+1,y) - 4*F(I,x,y+1) + 4*F(I,x+1,y+1);
+			 a33 = 4*F(I,x,y) - 4*F(I,x+1,y) - 4*F(I,x,y+1) + 4*F(I,x+1,y+1);
 			a33+= 2*F(dIdx,x,y) + 2*F(dIdx,x+1,y) - 2*F(dIdx,x,y+1) - 2*F(dIdx,x+1,y+1);
 			a33+= 2*F(dIdy,x,y) - 2*F(dIdy,x+1,y) + 2*F(dIdy,x,y+1) - 2*F(dIdy,x+1,y+1);
 			a33+= F(dIdxdy,x,y) + F(dIdxdy,x+1,y) + F(dIdxdy,x,y+1) + F(dIdxdy,x+1,y+1);
@@ -342,7 +343,7 @@ float PolarPilatus::aveNo0(vector<float>& ar)
 
 
 
-void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, float size)
+void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, float size, float dq)
 { 
 /* 
   Finds beam center by BRUTE-FORCING a mximization calculation
@@ -394,7 +395,7 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
 		b += center_res;
 		bdim += 1;
 		}
-	q += 1;
+	q += dq;
 	qdim += 1;
 	//cout << "    --->" << (qMax-qMin - qdim) << endl;
 	}
@@ -423,14 +424,17 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
 	//cout << "    ---> " <<  qdim -i << endl;
 	}
 
-  qmax = qmax + (int)qMin;
+
+  //qmax = qmax*dq + (int)qMin;
   //float q_iang = q_res * float(qmax) + 0.01;
   //float q_pix = tan( 2 * asin( q_iang * wavelen / (4 * M_PI) ) ) * detdist / pixsize ;
 
-  float q_pix = float(qmax);
+  float q_pix = float(qmax)*dq + float( qMin ) ;
 
   x_center = float(amax)*center_res + aMin;
   y_center = float(bmax)*center_res + bMin;
+
+cout << qmax  << endl;
 
   cout << "\n      ----> The peak intensity value is: " << max << ".";
   cout <<   "\n      ----> The max parameters are: (q,a,b) (" << q_pix << "," << x_center << "," << y_center << ").";
@@ -533,10 +537,13 @@ void PolarPilatus::InterpolateToPolar(float qres_, int Nphi_, int Nq_, float max
 /*
   HERE WE BIN THE PIXELS RADIALLY ON THE DETECOTR, BUT IN RECIPROCAL SPACE UNITS.
 
-  This is a bit tricky due to the non linearity in the q_pix <--> q_inv_ang relationship..
-  --> The goal is to bin on an inv_angstrom scale. 
-      The non-linearity means that a ring of width 0.02 inv_ang at low q contains fewer pixels radially
-      than one at high q...
+  This is a bit tricky due to the non linearity in the 
+  q_pix <--> q_inv_ang relationship..
+  
+  The goal is to bin on an inv_angstrom scale. 
+  
+  The non-linearity means that a ring of width, say, 0.02 inv_ang at low q 
+  contains fewer pixels radially than one at high q...
 
   q       is in inv_ang.
   q_stop  is in inv_ang.
@@ -578,6 +585,11 @@ void PolarPilatus::InterpolateToPolar(float qres_, int Nphi_, int Nq_, float max
   cout << "\n    FINISHED WITH THE INTERPOLATION...\n";
 }
 
+
+
+
+
+
 PolarPilatus::~PolarPilatus()
 {
   cout << "\n    EXITING... HASTA LA VISTA, PILATUS 6M.\n\n";
@@ -616,4 +628,42 @@ delete [] I;
 return 0;
 }
 */
+
+
+bool mask(int x,int y){
+    int spikes=5;
+    if(x >486-spikes && x < 494+spikes)
+            return true;
+    else if(x >980-spikes && x < 988+spikes)
+            return true;
+    else if(x >1474-spikes && x < 1482+spikes)
+            return true;
+    else if(x >1968-spikes && x < 1976+spikes)
+            return true;
+    else if(y >194-spikes && y < 212+spikes)
+            return true;
+    else if(y >406-spikes && y < 424+spikes)
+            return true;
+    else if(y >618-spikes && y < 636+spikes)
+            return true;
+    else if(y >830-spikes && y < 848+spikes)
+            return true;
+    else if(y >1042-spikes && y < 1060+spikes)
+            return true;
+    else if(y >1254-spikes && y < 1272+spikes)
+            return true;
+    else if(y >1466-spikes && y < 1484+spikes)
+            return true;
+    else if(y >1678-spikes && y < 1696+spikes)
+            return true;
+    else if(y >1890-spikes && y < 1908+spikes)
+            return true;
+    else if(y >2102-spikes && y < 2120+spikes)
+            return true;
+    else if(y >2314-spikes && y < 2332+spikes)
+            return true;
+    else
+            return false;
+        }
+          
 

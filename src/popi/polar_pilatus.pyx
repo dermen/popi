@@ -1,10 +1,7 @@
 import numpy as np
 cimport numpy as np
 import pylab as plt
-
-# from odin.arnold import get_arnold as ga
-
-from odin import parse
+from odin.xray import parse
   
 cdef extern from "popi.h":
   cdef cppclass PolarPilatus:
@@ -24,7 +21,7 @@ cdef extern from "popi.h":
     int   Nq       # Radial dimension of polar-coverted detector
     int   Nphi     # Azimuthal dimension of polar-converted detector
 
-    void Center(float qMin, float qMax, float center_res, int Nphi_, float size)
+    void Center(float qMin, float qMax, float center_res, int Nphi_, float size, float dq)
     void InterpolateToPolar(float qres_, int Nphi_, int Nq_, float maxq_pix, float maxq, float * polpix)
     
 
@@ -94,7 +91,7 @@ cdef class polar:
     def __get__(self): 
       return self.pp.qres
 
-  def center(self,qMin,qMax,center_res=0.5,Nphi=50,size=20.):
+  def center(self,qMin,qMax,center_res=0.5,Nphi=50,size=20., dq =1):
     """ 
     Finds the center of pilatus image:
       polarpilatus.center(qMin,qMax,center_res=0.5,Nphi=50,size=20.)
@@ -106,9 +103,10 @@ cdef class polar:
     center_res : resolution of desired center in pixel units
     Nphi       : number of phi bins when maximizing angular average
     size       : defines a box around the center of the detector (pixel units)
+    dq         : resolution of the radius         
             
     """
-    self.pp.Center(float(qMin),float(qMax),float(center_res),int(Nphi), float(size) )
+    self.pp.Center(float(qMin),float(qMax),float(center_res),int(Nphi), float(size), float( dq ) )
 
   def Interpolate_to_polar(self,qres,Nphi):
     """ 
@@ -152,6 +150,8 @@ cdef class polarpilatus:
   cdef PolarPilatus *pp
 #    self.pp has a nice ring to it  ~.~
 
+  cdef object filename  
+  
   def __init__(self, cbf_filename,a=0,b=0):
     """
     Converts Pilatus 6M image to polar coordinate image
@@ -175,6 +175,8 @@ cdef class polarpilatus:
     detdist = cbf.path_length
     wavelen = cbf.wavelength
     pixsize = cbf.pixel_size[0]
+
+    self.filename = cbf_filename
 
     X = vals.shape[1]
     Y = vals.shape[0]
@@ -222,14 +224,14 @@ cdef class polarpilatus:
     def __get__(self): 
       return self.pp.qres
 
-  def cartesian_image(self,cbf_filename):
+  def cartesian_image(self):
     """ returns a cartesian image of the detector; params: string cbf_filename"""
-    cbf     = parse.CBF(cbf_filename)
+    cbf     = parse.CBF(self.filename)
     vals    = cbf.intensities
     return vals
 
 
-  def center(self,qMin,qMax,center_res=0.5,Nphi=50,size=20.):
+  def center(self,qMin,qMax,center_res=0.5,Nphi=50,size=20., dq = 1):
     """ 
     Finds the center of pilatus image:
       polarpilatus.center(qMin,qMax,center_res=0.5,Nphi=50,size=20.)
@@ -241,9 +243,9 @@ cdef class polarpilatus:
     center_res : resolution of desired center in pixel units
     Nphi       : number of phi bins when maximizing angular average
     size       : defines a box around the center of the detector (pixel units)
-            
+    dq         : resolution of the radius         
     """
-    self.pp.Center(float(qMin),float(qMax),float(center_res),int(Nphi), float(size) )
+    self.pp.Center(float(qMin),float(qMax),float(center_res),int(Nphi), float(size), float(dq) )
 
   def Interpolate_to_polar(self,qres,Nphi):
     """ 

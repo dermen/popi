@@ -5,7 +5,11 @@ using namespace std;
 class PolarPilatus
 {
   vector<float> cosPhi,sinPhi,A;
-
+  float a00,a10,a20,a30;
+  float a01,a11,a21,a31;
+  float a02,a12,a22,a32;
+  float a03,a13,a23,a33;
+  float interpI;
 
   float F( float ar[],int i, int j );
   float EvaluateIntensity( float coef[], float x , float y );
@@ -30,7 +34,7 @@ public:
   
   //float* polar_pixels;
   
-  void  Center(float qMin, float qMax, float center_res, int Nphi_, float size);
+  void  Center(float qMin, float qMax, float center_res, int Nphi_, float size, float dq);
   void  InterpolateToPolar(float qres_, int Nphi_, int Nq_, float maxq_pix, float maxq, float * polar_pixels);
  ~PolarPilatus();
 };
