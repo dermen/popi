@@ -31,6 +31,7 @@ public:
   float  pixsize,detdist,wavelen;
   float  qres;
   float  x_center,y_center;
+  float  q_center;
   
   //float* polar_pixels;
   

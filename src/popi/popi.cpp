@@ -24,6 +24,7 @@ PolarPilatus::PolarPilatus(int   Xdim_,       int Ydim_,       float * binData,
   detdist = detdist_; // meters
   pixsize = pixsize_; // meters
   wavelen = wavelen_; // angstroms
+  q_center = 0;
 
   bicubicCoefficients(binData);
 
@@ -433,6 +434,7 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
 
   x_center = float(amax)*center_res + aMin;
   y_center = float(bmax)*center_res + bMin;
+  q_center = q_pix;
 
 cout << qmax  << endl;
 
