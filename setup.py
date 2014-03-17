@@ -8,7 +8,7 @@ except AttributeError:
     numpy_include = numpy.get_numpy_include()
 
 corr = Extension(
-        'thor.corr',
+        'popi.corr',
          sources=['src/corr/correlate.pyx', 'src/corr/corr.cpp'],
          extra_compile_args={'gcc': ['--fast-math', '-O3', '-fPIC', '-Wall'],
                              'g++': ['--fast-math', '-O3', '-fPIC', '-Wall']},
@@ -17,7 +17,7 @@ corr = Extension(
          include_dirs = [numpy_include, 'src/corr'],
          language='c++')
 
-popi = Extension('thor.popi',
+popi = Extension('popi.popi',
                  sources=['src/popi/polar_pilatus.pyx', 'src/popi/popi.cpp'],
                  extra_compile_args={'gcc': ['--fast-math', '-O3', '-fPIC', '-Wall'],
                                      'g++': ['--fast-math', '-O3', '-fPIC', '-Wall']},
@@ -42,12 +42,12 @@ class custom_build_ext(build_ext):
         compiler_(self.compiler)
         build_ext.build_extensions(self)
 
-setup(  name        ='thor',
+setup(  name        ='popi',
         version     ='1.0',
         cmdclass   = {'build_ext': custom_build_ext },
         ext_modules = [corr,popi],
-        package_dir = {'thor': 'src'},
-        packages    = ['thor']  )
+        package_dir = {'popi': 'src'},
+        packages    = ['popi']  )
 
 
 
