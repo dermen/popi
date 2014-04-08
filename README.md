@@ -1,4 +1,5 @@
-thor
+popi
 ====
 
-handling the offspring ( correlations )  of odin 
+code for analyzing x-ray images, and performing angular correlations.
+
