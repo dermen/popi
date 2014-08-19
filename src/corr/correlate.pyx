@@ -54,14 +54,24 @@ def correlate_using_fft(self, x, y):
       The correlation between x and y
   """
 
-  xmean = x.mean()
-  ymean = y.mean()
+  #xm = np.ones_like(x)
+  #ym = np.ones_like(y)
+  #xm[np.where x == -1] = 0
+  #ym[np.where y == -1] = 0
+
+  #N_delta = np.zeros_like( x)
+  #for delta in xrange( N_delta.shape[1]):
+  #    N_delta[ :,delta] = np.sum( xm* np.roll( ym, delta,axis=1 ),axis=1 )
+
+  #xmean = np.average( x,weights=xm,axis=1)[:,None]
+  #ymean = np.average( y, weights=ym,axis=1)[:,None]
 
   # use d-FFT + convolution thm
-  ffx = fftpack.fft( x-xmean )
-  ffy = fftpack.fft( y-ymean )
-  iff = np.real( fftpack.ifft( np.conjugate(ffx) * ffy ) )
+  #ffx = fftpack.fft( (x-xmean)*xm,axis=1 )
+  #ffy = fftpack.fft( (y-ymean)*ym, axis=1 )
+  #iff = np.real( fftpack.ifft( np.conjugate(ffx) * ffy, axis=1 ) )
 
-  return iff / float ( x.shape[0] )
+  return 0
+  #return iff / N_delta
 
 

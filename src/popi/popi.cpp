@@ -17,7 +17,7 @@ PolarPilatus::PolarPilatus(int   Xdim_,       int Ydim_,       float * binData,
 			   float x_center_=0, float y_center_=0)
 {
 
-  cout << "\n    WELCOME TO POLAR PILATUS. LOADING DATA...";
+  //cout << "\n    WELCOME TO POLAR PILATUS. LOADING DATA...";
 
   Xdim    = Xdim_;    // pixel units
   Ydim    = Ydim_;    // pixel units
@@ -38,9 +38,9 @@ PolarPilatus::PolarPilatus(int   Xdim_,       int Ydim_,       float * binData,
     x_center = x_center_;
     y_center = y_center_;
   }
-  cout << "      --> Initializing center at x_center, y_center = " << x_center << " , " << y_center << endl; 
+  //cout << "      --> Initializing center at x_center, y_center = " << x_center << " , " << y_center << endl; 
 
-  cout << "    DONE LOADING.\n";
+  //cout << "    DONE LOADING.\n";
 
 }
 
@@ -236,7 +236,7 @@ void  PolarPilatus::bicubicCoefficients( float *I ){
 */
 
 
-	cout << "\n      --> Calculating interpolation coefficients ...\n";
+	//cout << "\n      --> Calculating interpolation coefficients ...\n";
         A.clear();
 	y=0;
 	while(y < Ydim-1){
@@ -351,8 +351,8 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
   Consider implementing gradient decent if this starts lagging
 */
 
-  cout << "\n    STARTING CENTER FINDING ALGORITHM...";
-  cout << "\n    (gimmie Bragg ring images)";
+  //cout << "\n    STARTING CENTER FINDING ALGORITHM...";
+  //cout << "\n    (gimmie Bragg ring images)";
 
   Nphi = Nphi_;
 
@@ -373,7 +373,7 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
 
   int qdim(0),adim(0),bdim(0);
   float q(qMin);
-  cout << "\n      --> Accumulating angular average maxima...";
+  //cout << "\n      --> Accumulating angular average maxima...";
   while (q < qMax){
 	//float q_iang = q_res * q + 0.01;
 	//float q_pix = tan( 2 * asin( q_iang * wavelen / (4 * M_PI) ) ) * detdist / pixsize ;
@@ -401,7 +401,7 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
 	//cout << "    --->" << (qMax-qMin - qdim) << endl;
 	}
 
-  cout << "\n      --> Calculating the center...";
+  //cout << "\n      --> Calculating the center...";
 
   int i(0);
   float max(0);
@@ -436,11 +436,11 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
   y_center = float(bmax)*center_res + bMin;
   q_center = q_pix;
 
-cout << qmax  << endl;
+//cout << qmax  << endl;
 
-  cout << "\n      ----> The peak intensity value is: " << max << ".";
-  cout <<   "\n      ----> The max parameters are: (q,a,b) (" << q_pix << "," << x_center << "," << y_center << ").";
-  cout << "\n    UPDATING CENTER TO BE x_center,y_center = " << x_center << " , " << y_center << endl; 
+  //cout << "\n      ----> The peak intensity value is: " << max << ".";
+  //cout <<   "\n      ----> The max parameters are: (q,a,b) (" << q_pix << "," << x_center << "," << y_center << ").";
+  //cout << "\n    UPDATING CENTER TO BE x_center,y_center = " << x_center << " , " << y_center << endl; 
 
   }
 
@@ -499,7 +499,7 @@ void PolarPilatus::InterpolateToPolar(float qres_, int Nphi_, int Nq_, float max
   qres = qres_;
   Nq = Nq_;
 
-  cout << "\n    BEGINNING POLAR CONVERSION OF PILATUS 6M DETECTOR IMAGE...";
+  //cout << "\n    BEGINNING POLAR CONVERSION OF PILATUS 6M DETECTOR IMAGE...";
 
 // max Q in pixels units on the detector (with a 15 pixel cushion)
 // -->need to hard code something better here, for instance if beam center is more than 15 pixels off from 
@@ -584,7 +584,7 @@ void PolarPilatus::InterpolateToPolar(float qres_, int Nphi_, int Nq_, float max
   q_index += 1;
   }
   
-  cout << "\n    FINISHED WITH THE INTERPOLATION...\n";
+  //cout << "\n    FINISHED WITH THE INTERPOLATION...\n";
 }
 
 
@@ -594,7 +594,7 @@ void PolarPilatus::InterpolateToPolar(float qres_, int Nphi_, int Nq_, float max
 
 PolarPilatus::~PolarPilatus()
 {
-  cout << "\n    EXITING... HASTA LA VISTA, PILATUS 6M.\n\n";
+  //cout << "\n    EXITING... HASTA LA VISTA, PILATUS 6M.\n\n";
   //delete [] polar_pixels;
 }
 
