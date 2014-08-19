@@ -96,8 +96,9 @@ cdef class polar:
 
   def center(self,qMin,qMax,center_res=0.5,Nphi=50,size=20., dq =1):
     """ 
-    Finds the center of pilatus image:
-      polarpilatus.center(qMin,qMax,center_res=0.5,Nphi=50,size=20.)
+    Finds the optimal center and radius of a ring profile on a pilatus image. This gives
+    the optimal beamX, beamY.
+      polarpilatus.center(qMin,qMax,center_res=0.5,Nphi=50,size=20.,dq=1)
    
     -------------------
     PARAMS
@@ -106,6 +107,7 @@ cdef class polar:
     center_res : resolution of desired center in pixel units
     Nphi       : number of phi bins when maximizing angular average
     size       : defines a box around the center of the detector (pixel units)
+                 which we will scan for optimal beamX,beamY
     dq         : resolution of the radius         
             
     """
@@ -118,9 +120,9 @@ cdef class polar:
     Nphi :  number of pixels per polar scattering ring
     """
   
-    maxq_pix = np.floor( float (self.pp.Xdim/2.))-50
+    maxq_pix = np.floor( float (self.pp.Xdim/2.))-10
     if self.pp.Ydim < self.pp.Xdim:
-      maxq_pix = np.floor( float (self.pp.Ydim/2.))-50
+      maxq_pix = np.floor( float (self.pp.Ydim/2.))-10
     Nq=0
     maxq = np.sin( np.arctan2( maxq_pix*self.pp.pixsize, self.pp.detdist ) / 2.)* 4. * np.pi /  self.pp.wavelen
     q = 0
