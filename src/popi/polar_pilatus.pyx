@@ -21,7 +21,8 @@ cdef extern from "popi.h":
     int   Nq       # Radial dimension of polar-coverted detector
     int   Nphi     # Azimuthal dimension of polar-converted detector
 
-    void Center(float qMin, float qMax, float center_res, int Nphi_, float size, float dq)
+    void evaluateMultiple( float* xpoints, float* ypoints, float* vals, int num_points )
+    void Center(float qMin, float qMax, float center_res, int Nphi_, float size, float dq, int q_only)
     void InterpolateToPolar(float qres_, int Nphi_, int Nq_, float maxq_pix, float maxq, float * polpix)
     
 
@@ -94,7 +95,23 @@ cdef class polar:
     def __get__(self): 
       return self.pp.qres
 
-  def center(self,qMin,qMax,center_res=0.5,Nphi=50,size=20., dq =1):
+  def eval_points( self, xpoints_, ypoints_ ):
+    num_points = xpoints_.shape[0]
+    vals_ = np.zeros_like( num_points )
+    cdef np.ndarray[ndim=1, dtype=np.float32_t] xpoints 
+    cdef np.ndarray[ndim=1, dtype=np.float32_t] ypoints 
+    cdef np.ndarray[ndim=1, dtype=np.float32_t] vals
+
+    xpoints = np.ascontiguousarray(xpoints_.flatten(),dtype=np.float32)
+    ypoints = np.ascontiguousarray(ypoints_.flatten(),dtype=np.float32)
+    vals = np.ascontiguousarray(vals_.flatten(),dtype=np.float32)
+    
+    #cdef np.ndarray[ndim=1, dtype=np.float32_t] vals = np.zeros(num_points,dtype=np.float32)
+    #vals = np.ascontiguousarray(np.zeros( vals,dtype=np.float32) )
+    self.pp.evaluateMultiple(  &xpoints[0], &ypoints[0],  &vals[0], num_points )
+    return vals
+
+  def center(self,qMin,qMax,center_res=0.5,Nphi=50,size=20., dq =1. ,q_only=0):
     """ 
     Finds the optimal center and radius of a ring profile on a pilatus image. This gives
     the optimal beamX, beamY.
@@ -109,9 +126,10 @@ cdef class polar:
     size       : defines a box around the center of the detector (pixel units)
                  which we will scan for optimal beamX,beamY
     dq         : resolution of the radius         
-            
+    q_only     : if 1, then keeps center fixed and find pixel value of max q
+                
     """
-    self.pp.Center(float(qMin),float(qMax),float(center_res),int(Nphi), float(size), float( dq ) )
+    self.pp.Center(float(qMin),float(qMax),float(center_res),int(Nphi), float(size), float( dq ), int( q_only) )
 
   def Interpolate_to_polar(self,qres,Nphi):
     """ 
