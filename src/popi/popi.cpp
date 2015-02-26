@@ -51,6 +51,25 @@ float PolarPilatus::F(float ar[],int i,int j)
   return val;
 }
 
+
+void PolarPilatus::evaluateMultiple( float * xpoints, float * ypoints, float * vals, int num_points  )
+{
+    float * coefficients = new float[16];
+    for(int i_pt=0; i_pt < num_points; i_pt++ )
+    {
+        int i = int( floor(xpoints[i_pt]) );
+        int j = int( floor(ypoints[i_pt]) );
+        int aStart = 16*j*(Xdim-1) + 16*i;
+        int k(0);
+        while (k < 16)
+        {
+            coefficients[k] = A[k+aStart];
+            k += 1;
+        }
+        vals[i_pt] = EvaluateIntensity( coefficients, xpoints[i_pt], ypoints[i_pt] );
+    }
+}
+
 float PolarPilatus::EvaluateIntensity(float coef[],float x,float y){
         a00=coef[0];
         a10=coef[1];
@@ -344,10 +363,10 @@ float PolarPilatus::aveNo0(vector<float>& ar)
 
 
 
-void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, float size, float dq)
+void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, float size, float dq, int q_only)
 { 
 /* 
-  Finds beam center by BRUTE-FORCING a mximization calculation
+  Finds beam center by BRUTE-FORCING a maximization calculation
   Consider implementing gradient decent if this starts lagging
 */
 
@@ -371,6 +390,7 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
   float bMin =  y_center - size ;
   float bMax =  y_center + size ;
 
+<<<<<<< HEAD
   int qdim(0),adim(0),bdim(0);
   float q(qMin);
   //cout << "\n      --> Accumulating angular average maxima...";
@@ -402,45 +422,140 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
 	}
 
   //cout << "\n      --> Calculating the center...";
+=======
+  if(q_only==0)
+  {
 
-  int i(0);
-  float max(0);
-  int qmax(0),amax(0),bmax(0);
-  while( i < qdim-1){
-	int j(0);
-	while(j < bdim-1){
-		int k(0);
-		while( k < adim-1){
-			if (maxAA[i*bdim*adim + j*adim + k] > max){
-				max = maxAA[i*bdim*adim + j*adim + k];
-				qmax=i;
-				bmax=j;
-				amax=k;
-				}
-			k += 1;
-			}
-		j += 1;
-		}
-	i += 1;
-	//cout << "    ---> " <<  qdim -i << endl;
-	}
+      int qdim(0),adim(0),bdim(0);
+      float q(qMin);
+      cout << "\n      --> Accumulating angular average maxima...";
+      while (q < qMax){
+        //float q_iang = q_res * q + 0.01;
+        //float q_pix = tan( 2 * asin( q_iang * wavelen / (4 * M_PI) ) ) * detdist / pixsize ;
+        
+        float q_pix = q;
+        
+        bdim=0;
+        float b(bMin);
+        while (b < bMax){
+            adim=0;
+            float a(aMin);
+            while(a < aMax){
+                vector<float> IvsPhi (Nphi,0);
+                getPixelsAtQ(IvsPhi, 0, q_pix, a, b);
+                float AA = aveNo0( IvsPhi );
+                maxAA.push_back( AA );
+                a += center_res;
+                adim += 1;
+                }
+            b += center_res;
+            bdim += 1;
+            }
+        q += dq;
+        qdim += 1;
+        //cout << "    --->" << (qMax-qMin - qdim) << endl;
+        }
+>>>>>>> 28e33b7d87ae6a34cce967c9dcd3b833e3ad667d
+
+      cout << "\n      --> Calculating the center...";
+
+      int i(0);
+      float max(0);
+      int qmax(0),amax(0),bmax(0);
+      while( i < qdim-1){
+        int j(0);
+        while(j < bdim-1){
+            int k(0);
+            while( k < adim-1){
+                if (maxAA[i*bdim*adim + j*adim + k] > max){
+                    max = maxAA[i*bdim*adim + j*adim + k];
+                    qmax=i;
+                    bmax=j;
+                    amax=k;
+                    }
+                k += 1;
+                }
+            j += 1;
+            }
+        i += 1;
+        //cout << "    ---> " <<  qdim -i << endl;
+        }
 
 
-  //qmax = qmax*dq + (int)qMin;
-  //float q_iang = q_res * float(qmax) + 0.01;
-  //float q_pix = tan( 2 * asin( q_iang * wavelen / (4 * M_PI) ) ) * detdist / pixsize ;
+      //qmax = qmax*dq + (int)qMin;
+      //float q_iang = q_res * float(qmax) + 0.01;
+      //float q_pix = tan( 2 * asin( q_iang * wavelen / (4 * M_PI) ) ) * detdist / pixsize ;
 
-  float q_pix = float(qmax)*dq + float( qMin ) ;
+      float q_pix = float(qmax)*dq + float( qMin ) ;
 
-  x_center = float(amax)*center_res + aMin;
-  y_center = float(bmax)*center_res + bMin;
-  q_center = q_pix;
+      x_center = float(amax)*center_res + aMin;
+      y_center = float(bmax)*center_res + bMin;
+      q_center = q_pix;
 
+    cout << qmax  << endl;
+
+      cout << "\n      ----> The peak intensity value is: " << max << ".";
+      cout <<   "\n      ----> The max parameters are: (q,a,b) (" << q_pix << "," << x_center << "," << y_center << ").";
+      cout << "\n    UPDATING CENTER TO BE x_center,y_center = " << x_center << " , " << y_center << endl; 
+
+      }
+
+  else // if q_only
+  {
+      int qdim(0);
+      float q(qMin);
+      cout << "\n      --> Accumulating angular average maxima...";
+      while (q < qMax){
+        //float q_iang = q_res * q + 0.01;
+        //float q_pix = tan( 2 * asin( q_iang * wavelen / (4 * M_PI) ) ) * detdist / pixsize ;
+        
+        float q_pix = q;
+        
+        vector<float> IvsPhi (Nphi,0);
+        getPixelsAtQ(IvsPhi, 0, q_pix, x_center, y_center);
+        float AA = aveNo0( IvsPhi );
+        maxAA.push_back( AA );
+        q += dq;
+        qdim += 1;
+        }
+
+      cout << "\n      --> Calculating the ring position in pixel units...";
+
+      int i(0);
+      float max(0);
+      int qmax(0);
+      while( i < qdim-1)
+      {
+        if (maxAA[i] > max )
+        {
+          max = maxAA[i];
+          qmax=i;
+        }
+        i += 1;
+      }
+
+
+      float q_pix = float(qmax)*dq + float( qMin ) ;
+
+      q_center = q_pix;
+
+      cout << qmax  << endl;
+
+      cout << "\n      ----> The peak intensity value is: " << max << ".";
+      cout <<   "\n      ----> The max parameters are: (q,a,b) (" << q_pix << "," << x_center << "," << y_center << ").";
+      cout << "\n    UPDATING CENTER TO BE x_center,y_center = " << x_center << " , " << y_center << endl; 
+
+
+<<<<<<< HEAD
 //cout << qmax  << endl;
 
   //cout << "\n      ----> The peak intensity value is: " << max << ".";
   //cout <<   "\n      ----> The max parameters are: (q,a,b) (" << q_pix << "," << x_center << "," << y_center << ").";
   //cout << "\n    UPDATING CENTER TO BE x_center,y_center = " << x_center << " , " << y_center << endl; 
+=======
+  } // end if q_only
+
+>>>>>>> 28e33b7d87ae6a34cce967c9dcd3b833e3ad667d
 
   }
 
