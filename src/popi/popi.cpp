@@ -390,7 +390,6 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
   float bMin =  y_center - size ;
   float bMax =  y_center + size ;
 
-<<<<<<< HEAD
   int qdim(0),adim(0),bdim(0);
   float q(qMin);
   //cout << "\n      --> Accumulating angular average maxima...";
@@ -422,7 +421,6 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
 	}
 
   //cout << "\n      --> Calculating the center...";
-=======
   if(q_only==0)
   {
 
@@ -455,7 +453,6 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
         qdim += 1;
         //cout << "    --->" << (qMax-qMin - qdim) << endl;
         }
->>>>>>> 28e33b7d87ae6a34cce967c9dcd3b833e3ad667d
 
       cout << "\n      --> Calculating the center...";
 
@@ -546,16 +543,13 @@ void PolarPilatus::Center(float qMin, float qMax, float center_res, int Nphi_, f
       cout << "\n    UPDATING CENTER TO BE x_center,y_center = " << x_center << " , " << y_center << endl; 
 
 
-<<<<<<< HEAD
 //cout << qmax  << endl;
 
   //cout << "\n      ----> The peak intensity value is: " << max << ".";
   //cout <<   "\n      ----> The max parameters are: (q,a,b) (" << q_pix << "," << x_center << "," << y_center << ").";
   //cout << "\n    UPDATING CENTER TO BE x_center,y_center = " << x_center << " , " << y_center << endl; 
-=======
   } // end if q_only
 
->>>>>>> 28e33b7d87ae6a34cce967c9dcd3b833e3ad667d
 
   }
 
