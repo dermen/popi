@@ -57,7 +57,7 @@ def autocorrelate(A, mask_val = -1,mean_sub=1):
   del c
   return v3
 
-def autocorrelate_using_fft(self, x):
+def autocorrelate_using_fft( x):
   """
   Compute the correlation between 2 arrays using the 
   convolution theorem. Works well for unmasked arrays.
