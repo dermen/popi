@@ -7,8 +7,9 @@ class Corr
   float ar2_mean;
   float mean_no_zero(float * ar);
   void correlate(float * ar1, float * ar2, float * ar3);
+  void autocorrelate(float * ar1, float * ar3);
 public:
-  Corr(int N_, float * ar1, float * ar2, float * ar3, float mask_val_);
+  Corr(int N_, float * ar1, float * ar2, float * ar3, float mask_val_, int mean_sub_);
   ~Corr();
 };
 

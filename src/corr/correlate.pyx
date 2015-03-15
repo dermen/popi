@@ -5,11 +5,11 @@ from scipy import fftpack
 
 cdef extern from "corr.h":
   cdef cppclass Corr:
-    Corr(int N_, float * ar1, float * ar2, float * ar3, float mask_val_) except +
+    Corr(int N_, float * ar1, float * ar2, float * ar3, float mask_val_ ,int mean_sub_) except +
 
 cdef Corr * c
 
-def correlate(A,B, mask_val = -1):
+def correlate(A,B, mask_val = -1,mean_sub=1):
   """
   compute the correlation between 2 arrays
   Parameters:
@@ -18,6 +18,7 @@ def correlate(A,B, mask_val = -1):
   B, 1D numpy array
   mask_val, number value of each masked pixels ( defaults = -1 )
             they should all have the same value
+  mean_sub, 1 to subtract the mean before correlating, 0 to not
   """
   if A.shape != B.shape:
     print "arrays must be of same size and shape" 
@@ -31,7 +32,28 @@ def correlate(A,B, mask_val = -1):
   v1 = np.ascontiguousarray(A.flatten(),dtype=np.float32)
   v2 = np.ascontiguousarray(B.flatten(),dtype=np.float32)
   v3 = np.ascontiguousarray(C.flatten(),dtype=np.float32)
-  c  = new Corr(N,&v1[0], &v2[0], &v3[0], mask_val)
+  c  = new Corr(N,&v1[0], &v2[0], &v3[0], mask_val, mean_sub)
+  del c
+  return v3
+
+def autocorrelate(A, mask_val = -1,mean_sub=1):
+  """
+  compute the correlation between 2 arrays
+  Parameters:
+  -----------
+  A, 1D numpy array
+  mask_val, number value of each masked pixels ( defaults = -1 )
+            they should all have the same value
+  mean_sub, 1 to subtract the mean before correlating, 0 to not
+  """
+  N = A.shape[0]
+  C = np.zeros_like(A[:N/2])
+  cdef np.ndarray[ndim=1,dtype=np.float32_t] v1
+  cdef np.ndarray[ndim=1,dtype=np.float32_t] v3
+  
+  v1 = np.ascontiguousarray(A.flatten(),dtype=np.float32)
+  v3 = np.ascontiguousarray(C.flatten(),dtype=np.float32)
+  c  = new Corr(N,&v1[0], &v1[0], &v3[0], mask_val, mean_sub)
   del c
   return v3
 
