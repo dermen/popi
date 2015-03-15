@@ -57,7 +57,7 @@ def autocorrelate(A, mask_val = -1,mean_sub=1):
   del c
   return v3
 
-def correlate_using_fft(self, x, y):
+def autocorrelate_using_fft(self, x):
   """
   Compute the correlation between 2 arrays using the 
   convolution theorem. Works well for unmasked arrays.
@@ -67,33 +67,11 @@ def correlate_using_fft(self, x, y):
   ----------
   x : 1d numpy array of floats
       The intensities along ring 1
-  y : 1d numpy array of floats
-      The intensities along ring 2
     
   Returns
   -------
   iff : 1d numpy darray, float
       The correlation between x and y
   """
-
-  #xm = np.ones_like(x)
-  #ym = np.ones_like(y)
-  #xm[np.where x == -1] = 0
-  #ym[np.where y == -1] = 0
-
-  #N_delta = np.zeros_like( x)
-  #for delta in xrange( N_delta.shape[1]):
-  #    N_delta[ :,delta] = np.sum( xm* np.roll( ym, delta,axis=1 ),axis=1 )
-
-  #xmean = np.average( x,weights=xm,axis=1)[:,None]
-  #ymean = np.average( y, weights=ym,axis=1)[:,None]
-
-  # use d-FFT + convolution thm
-  #ffx = fftpack.fft( (x-xmean)*xm,axis=1 )
-  #ffy = fftpack.fft( (y-ymean)*ym, axis=1 )
-  #iff = np.real( fftpack.ifft( np.conjugate(ffx) * ffy, axis=1 ) )
-
-  return 0
-  #return iff / N_delta
-
-
+  np.fft.rfft( x, n=x.shape[1], axis=1 )
+  return np.fft.irfft(x*np.conjugate(x), n=x.shape[1], axis=1 )
