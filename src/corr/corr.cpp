@@ -19,8 +19,8 @@ Corr::Corr(int N_, float * ar1, float * ar2, float * ar3,
   }
   else
   {
-    ar1_mean  =  mean_no_zero(ar1);
-    ar2_mean  =  mean_no_zero(ar2);
+    ar1_mean  =  mean_sans_mask(ar1);
+    ar2_mean  =  mean_sans_mask(ar2);
   }
 
   if ( ar1 == ar2 )
@@ -85,7 +85,7 @@ void Corr::autocorrelate(float * ar1, float * arC)
   }
 }
 
-float Corr::mean_no_zero(float * ar)
+float Corr::mean_sans_mask(float * ar)
 
 {
   float ar_mean(0);
